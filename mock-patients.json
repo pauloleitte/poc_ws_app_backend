@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Kauê Raimundo Pedro Cavalcanti",
+    "naturalness": "Brasileiro",
+    "maritalStatus": "Casado(a)",
+    "cpf": "66219810236",
+    "rg": "322350086",
+    "birthDate": "23/09/1973",
+    "genre": "Masculino",
+    "email": "kkaueraimundopedrocavalcanti@hotmaill.com",
+    "cep": "69303250",
+    "address": "Rua Maria de Lurdes Coimbra, 217",
+    "district": "Calungá",
+    "city": "Boa Vista",
+    "state": "RR",
+    "telephone": "9527089668",
+    "cellphone": "95996911639",
+    "profession": "Engenheiro Civil"
+  },
+  {
+    "name": "Yuri Raimundo Ribeiro",
+    "naturalness": "Brasileiro",
+    "maritalStatus": "Casado(a)",
+    "cpf": "04506779665",
+    "rg": "239292303",
+    "birthDate": "17/06/1943",
+    "genre": "Masculino",
+    "email": "yyuriraimundoribeiro@viasegbrasil.com.br",
+    "cep": "86600585",
+    "address": "Avenida Esplanada, 154",
+    "district": "Parque Industrial Cafezal",
+    "city": "Rolândia",
+    "state": "PR",
+    "telephone": "4339329299",
+    "cellphone": "43998427643",
+    "profession": "Engenheiro Civil"
+  }
+]
