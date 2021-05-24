@@ -42,7 +42,8 @@ module.exports = {
                 return res.status(200).json({
                     auth: true,
                     token: token,
-                    user: user.name
+                    name: user.name,
+                    email: user.email
                 });
             }
         }
