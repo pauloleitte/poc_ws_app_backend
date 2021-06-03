@@ -25,7 +25,7 @@ routes.post("/images", multer(multerConfig).single("file"), async (req, res) => 
         size,
         key,
         url,
-        userId: req.userId
+        userId: req.headers.userid
     });
 
     return res.json(image);

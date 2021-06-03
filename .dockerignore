@@ -1,0 +1,6 @@
+*/node_modules
+*/tmp
+.env
+.gitignore
+sample.env
+package-lock.json

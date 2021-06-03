@@ -3,6 +3,7 @@ const mailService = require('../service/mailService');
 const bcryptService = require("../service/BcryptService");
 const crypto = require('crypto');
 const User = require('../model/User');
+const Image = require("../model/Image");
 
 module.exports = {
     async signup(req, res) {
@@ -19,14 +20,16 @@ module.exports = {
                 message: 'Usuário já se encontra cadastrado.'
             })
         }
-        await User.create({
+        var createUser = await User.create({
             name: name,
             email: email,
             password: password,
         })
-        return res.status(201).json({
-            message: 'Usuário cadastrado com sucesso.'
-        })
+        return res.status(201).json(
+            createUser.name,
+            createUser.email,
+            createUser._id,
+        )
     },
     async login(req, res) {
         const {
@@ -39,11 +42,13 @@ module.exports = {
         if (user) {
             if (await bcryptService.compare(password, user.password)) {
                 var token = await jwtService.generate(user.id)
+                var image = await Image.findOne({ userId: user.id });
                 return res.status(200).json({
                     auth: true,
                     token: token,
                     name: user.name,
-                    email: user.email
+                    email: user.email,
+                    avatar: image.url
                 });
             }
         }

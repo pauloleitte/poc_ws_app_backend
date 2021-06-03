@@ -22,7 +22,7 @@ app.use(
     express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
   );
 app.use('/api/v1', routesAuth)
-app.use('/api/v1', jwtService.validate, routesImage)
+app.use('/api/v1', routesImage)
 app.use('/api/v1', jwtService.validate, routesPatient)
 
 
