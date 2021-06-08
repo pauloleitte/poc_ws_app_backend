@@ -21,14 +21,22 @@ const UserSchema = new mongoose.Schema({
     passwordResetExpires: {
         type: Date,
         select: false,
+    },
+    image: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image',
+        required: false,
     }
 }, {
     timestamps: true
 });
 
-UserSchema.pre('save', async function(next) {
-    this.password = await bcryptService.encrypt(this.password)
-    next();
-})
+
+UserSchema.method("toJSON", function() {
+    const { __v, _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+  });
+  
 
 module.exports = mongoose.model('User', UserSchema)

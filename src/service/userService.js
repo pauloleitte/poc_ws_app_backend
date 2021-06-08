@@ -23,12 +23,14 @@ module.exports = {
         var createUser = await User.create({
             name: name,
             email: email,
-            password: password,
+            password: await bcryptService.encrypt(password),
         })
         return res.status(201).json(
-            createUser.name,
-            createUser.email,
-            createUser._id,
+            {
+                name: name,
+                id: createUser.id,
+                email: createUser.email
+            }
         )
     },
     async login(req, res) {
@@ -36,20 +38,22 @@ module.exports = {
             email,
             password
         } = req.body;
+
         const user = await User.findOne({
             email: email
-        })
+        }).populate('image');
+
         if (user) {
             if (await bcryptService.compare(password, user.password)) {
                 var token = await jwtService.generate(user.id)
-                var image = await Image.findOne({ userId: user.id });
                 return res.status(200).json({
                     auth: true,
                     token: token,
                     name: user.name,
                     email: user.email,
-                    avatar: image.url
+                    avatarUrl: user.image.url
                 });
+
             }
         }
         return res.status(400).json({
@@ -89,6 +93,10 @@ module.exports = {
                 message: 'Ocorreu um erro ao tentar recuperar a senha, tente novamente.'
             })
         }
+    },
+
+    async findById(id) {
+        return await User.findById(id);
     },
 
     async resetPassword(req, res) {

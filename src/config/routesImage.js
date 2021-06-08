@@ -1,43 +1,12 @@
 const routes = require("express").Router();
 const multer = require("multer");
 const multerConfig = require("./multer");
+const imageController = require("../controller/imageController");
+const jwtService = require("../service/jwtService");
 
-const Image = require("../model/Image");
-
-routes.get("/images", async (req, res) => {
-    const images = await Image.find({
-        userId: req.userId
-    });
-
-    return res.json(images);
-});
-
-routes.post("/images", multer(multerConfig).single("file"), async (req, res) => {
-    const {
-        originalname: name,
-        size,
-        key,
-        location: url = ""
-    } = req.file;
-
-    const image = await Image.create({
-        name,
-        size,
-        key,
-        url,
-        userId: req.headers.userid
-    });
-
-    return res.json(image);
-});
-
-routes.delete("/images/:id", async (req, res) => {
-    const image = await Image.findById(req.params.id);
-    if (!image) {
-        res.status(404).send();
-    }
-    await image.remove();
-    return res.status(204).send();
-});
+routes.post("/images-user", multer(multerConfig).single("file"), imageController.createImageUser);
+routes.get("/images", jwtService.validate, imageController.findAllImagesByUser);
+routes.post("/images-patient", jwtService.validate, multer(multerConfig).single("file"), imageController.createImagePatient);
+routes.delete("/images/:id", jwtService.validate, imageController.removeImage);
 
 module.exports = routes;

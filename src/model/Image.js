@@ -16,13 +16,25 @@ const ImageSchema = new mongoose.Schema({
   size: Number,
   key: String,
   url: String,
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: false,
+  },
+  patient: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Patient',
+    required: false,
   }
 }, {
   timestamps: true
+});
+
+
+ImageSchema.method("toJSON", function () {
+  const { __v, _id, ...object } = this.toObject();
+  object.id = _id;
+  return object;
 });
 
 ImageSchema.pre("save", function () {
@@ -40,10 +52,10 @@ ImageSchema.pre("remove", function () {
       })
       .promise()
       .then((response) => {
-        console.log(response.status);
+        console.log('sucesso ao remover do S3', response);
       })
       .catch((response) => {
-        console.log(response.status);
+        console.error('falha ao remover do S3', response);
       });
   } else {
     return promisify(fs.unlink)(
