@@ -13,6 +13,11 @@ module.exports = {
 
         const id = req.headers.userid
 
+        const imageExist = await Image.findOne({ user: id });
+        if (imageExist) {
+            await imageExist.remove();
+        }
+
         if (id) {
             const image = await Image.create({
                 name,
