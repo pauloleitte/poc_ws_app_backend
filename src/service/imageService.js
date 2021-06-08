@@ -14,32 +14,33 @@ module.exports = {
         const id = req.headers.userid
 
         if (id) {
-            const imageExist = await Image.findOne({ user: id });
-            
-            if (imageExist) {
-                await imageExist.remove();
-            }
+            const user = await userService.findById(req.headers.userid);
 
-            const image = await Image.create({
-                name,
-                size,
-                key,
-                url,
-                user: req.headers.userid
-            });
+            if (user) {
+                const imageExist = await Image.findOne({ user: id });
 
-            if (image) {
-                const user = await userService.findById(req.headers.userid);
-                if (user) {
+                if (imageExist) {
+                    await imageExist.remove();
+                }
+
+                const image = await Image.create({
+                    name,
+                    size,
+                    key,
+                    url,
+                    user: req.headers.userid
+                });
+
+                if (image) {
                     user.image = image._id;
                     await user.save();
                     return res.status(204).send();
+
                 }
             }
 
+            return res.status(400).json({ message: 'Usuário não encontrado' })
         }
-
-
         return res.status(500).json({ message: 'Some error occurred while upload image.' })
     },
     async findAllImagesByUser(req, res) {
@@ -62,6 +63,7 @@ module.exports = {
     },
 
     async createImagePatient(req, res) {
+        
         const {
             originalname: name,
             size,
@@ -73,28 +75,33 @@ module.exports = {
         const id = req.headers.patientid
 
         if (id) {
-            const imageExist = await Image.findOne({ patient: id });
-            if (imageExist) {
-                await imageExist.remove();
-            }
 
-            const image = await Image.create({
-                name,
-                size,
-                key,
-                url,
-                user: req.userId,
-                patient: req.headers.patientid
-            });
+            const patient = await patientService.findByIdImage(req, res);
 
-            if (image) {
-                const patient = await patientService.findByIdImage(req, res);
-                if (patient) {
+            if (patient) {
+
+                const imageExist = await Image.findOne({ patient: id });
+
+                if (imageExist) {
+                    await imageExist.remove();
+                }
+
+                const image = await Image.create({
+                    name,
+                    size,
+                    key,
+                    url,
+                    user: req.userId,
+                    patient: req.headers.patientid
+                });
+
+                if (image) {
                     patient.image = image._id;
                     await patient.save();
                     return res.status(204).send();
                 }
             }
+
         }
 
 
